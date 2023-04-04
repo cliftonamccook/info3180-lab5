@@ -43,8 +43,8 @@ def movies():
             "description": description
         }
         return jsonify(data=movie_data)
-    errors = {"errors": form_errors(movie_form)}
-    return jsonify(data=errors)
+    errors = form_errors(movie_form)
+    return jsonify(errors=errors)
 
 ###
 # The functions below should be applicable to all Flask apps.
