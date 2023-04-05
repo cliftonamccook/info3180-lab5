@@ -10,6 +10,7 @@ from app.forms import MovieForm
 from app.models import Movie
 from flask import render_template, request, jsonify, send_file, url_for, send_from_directory
 from werkzeug.utils import secure_filename
+from flask_wtf.csrf import generate_csrf
 import os
 from datetime import datetime
 
@@ -31,7 +32,7 @@ def movies():
         description = movie_form.description.data
         poster = movie_form.poster.data
         created_at = datetime.utcnow()
-        poster_filename = secure_filename(poster_filename.filename)
+        poster_filename = secure_filename(poster.filename)
         poster.save(os.path.join(app.config['UPLOAD_FOLDER'], poster_filename))
         new_movie = Movie(title, description, poster_filename, created_at)
         db.session.add(new_movie)
@@ -90,6 +91,11 @@ def page_not_found(error):
     return render_template('404.html'), 404
 
 
-# @app.route("/api/v1/images/<path:filename>")
+@app.route("/api/v1/images/<path:filename>")
 def getImage(filename):
     return send_from_directory(os.path.join(os.getcwd(), app.config['UPLOAD_FOLDER']), filename)
+
+
+@app.route('/api/v1/csrf-token', methods=['GET'])
+def get_csrf():
+    return jsonify({'csrf_token': generate_csrf()})
