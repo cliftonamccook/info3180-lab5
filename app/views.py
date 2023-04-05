@@ -47,6 +47,20 @@ def movies():
     errors = form_errors(movie_form)
     return jsonify(errors=errors)
 
+
+@app.route('/api/v1/movies', methods=['GET'])
+def get_movies():
+    movies = db.session.execute(db.select(Movie)).scalars()
+    movie_data = []
+    for movie in movies:
+        movie_data.append({
+           "id": movie.id,
+           "title": movie.title,
+           "description": movie.description,
+           "poster": url_for('getImage', filename=movie.poster)
+        })
+    return jsonify(movies=movie_data)
+
 ###
 # The functions below should be applicable to all Flask apps.
 ###
@@ -91,7 +105,7 @@ def page_not_found(error):
     return render_template('404.html'), 404
 
 
-@app.route("/api/v1/images/<path:filename>")
+@app.route("/api/v1/posters/<filename>")
 def getImage(filename):
     return send_from_directory(os.path.join(os.getcwd(), app.config['UPLOAD_FOLDER']), filename)
 
