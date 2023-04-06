@@ -49,7 +49,7 @@ def movies():
 
 
 @app.route('/api/v1/movies', methods=['GET'])
-def get_movies():
+def add_movies():
     movies = db.session.execute(db.select(Movie)).scalars()
     movie_data = []
     for movie in movies:
