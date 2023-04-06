@@ -26,7 +26,6 @@
             return response.json();
         })
         .then(function (data) {
-            // display a success message
             console.log(data);
         })
         .catch(function (error) {
