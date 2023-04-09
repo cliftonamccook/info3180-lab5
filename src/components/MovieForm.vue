@@ -79,7 +79,7 @@
         <textarea name="description" class="form-control" rows="3"></textarea>
         </div>
         <div class="form-group mb-3">
-        <label for="poster" class="form-label">Poster</label>
+        <label for="poster" class="form-label">Photo Upload</label>
         <input type="file" name="poster" class="form-control" />
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
