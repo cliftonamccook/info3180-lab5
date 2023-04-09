@@ -1,5 +1,8 @@
 <script setup>
     import { ref, onMounted } from "vue";
+    var success = ref("");
+    var hasErrors = ref("");
+    var errors = ref([]);
 
     let csrf_token = ref("");
 
@@ -26,14 +29,33 @@
             return response.json();
         })
         .then(function (data) {
-            console.log(data);
+            if (data.data) {
+                success.value = true;
+                hasErrors.value = false;
+                console.log(data.data);
+            }
+            if (data.errors) {
+                hasErrors.value = true;
+                success.value = false;
+                errors.value = data.errors;
+                console.log(data.errors);
+                clearForm();
+            }
         })
         .catch(function (error) {
             console.log(error);
         });
     }
 
+    function clearForm(){
+        var inputs = document.querySelectorAll('input');
+        var textArea = document.querySelectorAll('textarea');
+        inputs.forEach(input =>  input.value = '');
+        textArea.forEach(input =>  input.value = '');
+    }
+
     onMounted(() => {
+        clearForm();
         getCsrfToken();
     });
 </script>
@@ -41,6 +63,12 @@
 <template>
     <div class="form-container">
     <h2>Upload Form</h2>
+    <div v-if="success" class="alert alert-success">File Upload Successful</div>
+    <div v-if="hasErrors" class="alert alert-danger">
+        <ul>
+            <li v-for="err in errors">{{ err }}</li>
+        </ul>    
+    </div>
     <form @submit.prevent="saveMovie" enctype="multipart/form-data" id="movieForm">
         <div class="form-group mb-3">
         <label for="title" class="form-label">Movie Title</label>

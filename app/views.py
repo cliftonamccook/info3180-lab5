@@ -43,9 +43,9 @@ def movies():
             "poster": url_for('getImage', filename=poster_filename),
             "description": description
         }
-        return jsonify(data=movie_data)
+        return jsonify(data=movie_data), 201
     errors = form_errors(movie_form)
-    return jsonify(errors=errors)
+    return jsonify(errors=errors), 400
 
 
 @app.route('/api/v1/movies', methods=['GET'])
@@ -59,7 +59,7 @@ def add_movies():
            "description": movie.description,
            "poster": url_for('getImage', filename=movie.poster)
         })
-    return jsonify(movies=movie_data)
+    return jsonify(movies=movie_data), 200
 
 ###
 # The functions below should be applicable to all Flask apps.
